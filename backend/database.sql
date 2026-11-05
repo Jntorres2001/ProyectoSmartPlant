@@ -169,7 +169,6 @@ CREATE TABLE IF NOT EXISTS transacciones_pago (
 -- Si tu base de datos es nueva (creada con el CREATE TABLE de arriba),
 -- esta columna ya no existe y esta línea fallará — es esperado, ignórala.
 -- ----------------------------------------
-ALTER TABLE lecturas DROP COLUMN temperatura;
 
 -- ----------------------------------------
 -- Tabla: diagnosticos_ia (historial de diagnósticos y recomendaciones
