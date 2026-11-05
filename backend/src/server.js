@@ -27,6 +27,12 @@ const server = http.createServer(app);
 app.use(cors({ origin: process.env.FRONTEND_URL || '*' }));
 app.use(express.json());
 
+// Indica qué réplica (pod) atendió la petición; útil para evidenciar el balanceo en Kubernetes.
+app.use((req, res, next) => {
+  res.set('X-Pod', require('os').hostname());
+  next();
+});
+
 // ----------------------------------------
 // Rutas
 // ----------------------------------------

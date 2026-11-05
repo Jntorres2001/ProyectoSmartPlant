@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+  namespace: smartplant
+  labels: { app: backend }
+spec:
+  replicas: 3
+  selector:
+    matchLabels: { app: backend }
+  template:
+    metadata:
+      labels: { app: backend }
+    spec:
+      containers:
+        - name: backend
+          image: smartplant-backend:1.0
+          imagePullPolicy: Never          # imagen cargada con "kind load"
+          ports:
+            - containerPort: 3000
+          env:
+            - { name: PORT, value: "3000" }
+            - { name: DB_HOST, value: "mysql" }
+            - { name: DB_PORT, value: "3306" }
+            - { name: DB_USER, value: "root" }
+            - { name: DB_NAME, value: "smartplant" }
+            - { name: REDIS_URL, value: "redis://redis:6379" }
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef: { name: smartplant-secret, key: DB_PASSWORD }
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef: { name: smartplant-secret, key: JWT_SECRET }
+          securityContext:
+            capabilities:
+              add: ["NET_ADMIN"]          # necesario para tc/netem
+          readinessProbe:
+            httpGet: { path: /api/health, port: 3000 }
+            initialDelaySeconds: 3
+            periodSeconds: 3
+          livenessProbe:
+            httpGet: { path: /api/health, port: 3000 }
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          resources:
+            requests: { cpu: 100m, memory: 96Mi }
+            limits: { cpu: 500m, memory: 256Mi }
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend
+  namespace: smartplant
+spec:
+  type: ClusterIP
+  selector: { app: backend }
+  ports:
+    - port: 3000
+      targetPort: 3000

@@ -1,0 +1,11 @@
+# Clúster local de 3 nodos (1 control-plane + 2 workers) para simular un entorno distribuido
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+name: smartplant
+nodes:
+  - role: control-plane
+    extraPortMappings:
+      - containerPort: 30080   # NodePort del frontend
+        hostPort: 8080
+  - role: worker
+  - role: worker

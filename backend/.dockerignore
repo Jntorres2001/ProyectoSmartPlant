@@ -1,0 +1,4 @@
+node_modules
+.env
+performance
+benchmark_*.js

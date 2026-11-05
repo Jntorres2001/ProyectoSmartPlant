@@ -180,6 +180,21 @@ Verás el dashboard actualizarse en tiempo real automáticamente gracias al WebS
 - **Frontend:** React, Vite, React Router, Recharts
 - **Firmware:** Arduino C++, ArduinoJson
 
+## 📈 Pruebas de rendimiento con k6
+
+El backend incluye pruebas de carga para endpoints GET de la API, con medición de tiempo de
+respuesta, p(95), tasa de errores y solicitudes por segundo. Revisa
+[`backend/performance/k6/README.md`](backend/performance/k6/README.md) para endpoints seleccionados,
+requisitos, comandos para diferentes cantidades de usuarios virtuales y comparación de resultados.
+Las pruebas no requieren cambios en las funcionalidades ni en la base de datos.
+
+## 🛡️ Análisis de resiliencia
+
+El monitor para observar interrupciones y recuperación del backend, WebSocket y MySQL está en
+[`backend/performance/resilience/README.md`](backend/performance/resilience/README.md). Usa sondeos
+de solo lectura y guarda evidencias CSV/JSON; las instrucciones para futuras réplicas son
+preparatorias y no implementan contenedores ni Kubernetes.
+
 ---
 
 ## ✉️ Nuevas funcionalidades: correo, OTP, recuperación, reportes y pagos
@@ -335,4 +350,3 @@ OLLAMA_MODEL=qwen2.5:0.5b
   ninguna dependencia con bindings nativos (se evitó `canvas`/`chartjs-node-canvas` a propósito para
   no depender de Cairo/Pango del sistema operativo).
 - Para el Asistente IA: Ollama corriendo localmente con el modelo `qwen2.5:0.5b` descargado.
-
